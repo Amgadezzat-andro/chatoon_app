@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 //pages
 import './pages/splash_page.dart';
+import './pages/login_page.dart';
 //services
 import 'services/navigation_service.dart';
 
@@ -33,7 +34,11 @@ class MainApp extends StatelessWidget {
           backgroundColor: Color.fromRGBO(30, 29, 37, 1.0),
         ),
       ),
-    //  navigatorKey: NavigationService.navigatorKey,
+      navigatorKey: NavigationService.navigatorKey,
+      initialRoute: '/login',
+      routes: {
+        '/login': (BuildContext _context) => LoginPage(),
+      },
     );
   }
 }
