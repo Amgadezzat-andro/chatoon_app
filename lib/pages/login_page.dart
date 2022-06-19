@@ -116,7 +116,6 @@ class _LoginPageState extends State<LoginPage> {
   Widget _registerAccountLink() {
     return GestureDetector(
       onTap: () {
-        //print('Clicked !');
       },
       child: Container(
         child: Text(
