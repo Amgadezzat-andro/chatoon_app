@@ -9,6 +9,9 @@ import 'package:get_it/get_it.dart';
 
 //Services
 import '../services/navigation_service.dart';
+import '../services/media_service.dart';
+import '../services/cloud_storage_service.dart';
+import '../services/database_service.dart';
 
 class SplashPage extends StatefulWidget {
   final VoidCallback onIntializationComplete;
@@ -29,9 +32,11 @@ class _SplashPageState extends State<SplashPage> {
   void initState() {
     super.initState();
     // do setup then make another function
-    _setup().then(
-      (_) => widget.onIntializationComplete(),
-    );
+    Future.delayed(Duration(seconds: 1)).then((_) {
+      _setup().then(
+        (_) => widget.onIntializationComplete(),
+      );
+    });
   }
 
   @override
@@ -65,16 +70,28 @@ class _SplashPageState extends State<SplashPage> {
     //initialize firebase
     await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform);
+
     // register services
     _registerServices();
   }
-
 
   // register services through all application using GETIT PACKAGE
   void _registerServices() {
     //register navigation service
     GetIt.instance.registerSingleton<NavigationService>(
       NavigationService(),
+    );
+    //register media service
+    GetIt.instance.registerSingleton<MediaService>(
+      MediaService(),
+    );
+    //register cloud service
+    GetIt.instance.registerSingleton<CloudStorageService>(
+      CloudStorageService(),
+    );
+    //register database service
+    GetIt.instance.registerSingleton<DatabaseService>(
+      DatabaseService(),
     );
   }
 }
