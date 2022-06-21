@@ -6,12 +6,12 @@ import 'package:path_provider/path_provider.dart';
 
 class MediaService {
   MediaService() {}
-  Future<File?> pickImageFromLibrary() async {
+  Future<PlatformFile?> pickImageFromLibrary() async {
     FilePickerResult? result =
         await FilePicker.platform.pickFiles(type: FileType.image);
 
     if (result != null) {
-      // return _result.files[0];
+      return result.files[0];
       // print(_result.files.first.name);
       // print(_result.files.first.bytes);
       // print(_result.files.first.size);
@@ -19,12 +19,12 @@ class MediaService {
       // print(_result.files.first.path);
 
       // if you return now it will return path in cache (not working)
-      PlatformFile file = result.files.first;
+      // PlatformFile file = result.files.first;
       //print(result.files.first.path);
-      final newFile = await saveFilePermanently(file);
+      // final newFile = await saveFilePermanently(file);
       //print(newFile.path);
 
-      return newFile;
+      // return newFile;
     }
     return null;
   }

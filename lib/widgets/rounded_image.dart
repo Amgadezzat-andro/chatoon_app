@@ -31,7 +31,7 @@ class RoundedImageNetwork extends StatelessWidget {
 }
 
 class RoundedImageFile extends StatelessWidget {
-  final File? image;
+  final PlatformFile? image;
   final double size;
 
   RoundedImageFile({
@@ -48,7 +48,7 @@ class RoundedImageFile extends StatelessWidget {
       decoration: BoxDecoration(
         image: DecorationImage(
           fit: BoxFit.cover,
-          image: FileImage(image!),
+          image: FileImage(File(image!.path!)),
         ),
         borderRadius: BorderRadius.all(Radius.circular(size)),
         color: Colors.black,

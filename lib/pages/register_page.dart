@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import '../services/media_service.dart';
 import '../services/database_service.dart';
 import '../services/cloud_storage_service.dart';
+import '../services/navigation_service.dart';
 
 //Widgets
 import '../widgets/custom_input_fields.dart';
@@ -31,9 +32,15 @@ class _RegisterPageState extends State<RegisterPage> {
   late double _deviceHeight;
   late double _deviceWidth;
 
-  // define file for profileimage from library
-  File? _profileImage;
+  //define authentication provider and database service and cloud storage service
+  late AuthenticationProvider _authenticationProvider;
+  late DatabaseService _databaseService;
+  late CloudStorageService _cloudStorageService;
 
+  // define file for profile image from library
+  PlatformFile? _profileImage;
+
+  // define form's Key
   final _registerFormKey = GlobalKey<FormState>();
 
   // define form vars
@@ -43,6 +50,10 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Assign Variables with it's needed code;
+    _authenticationProvider = Provider.of<AuthenticationProvider>(context);
+    _databaseService = GetIt.instance.get<DatabaseService>();
+    _cloudStorageService = GetIt.instance.get<CloudStorageService>();
     _deviceHeight = MediaQuery.of(context).size.height;
     _deviceWidth = MediaQuery.of(context).size.width;
     return _buildUI();
@@ -164,7 +175,27 @@ class _RegisterPageState extends State<RegisterPage> {
       name: 'Register',
       height: _deviceHeight * 0.065,
       width: _deviceWidth * 0.65,
-      onPressed: () async {},
+      onPressed: () async {
+        // validate and make sure pic not null
+        if (_registerFormKey.currentState!.validate() &&
+            _profileImage != null) {
+          // save after validation values email password name
+          _registerFormKey.currentState!.save();
+          // return uid after registering
+          String? _uid = await _authenticationProvider
+              .registerUserUsingEmailAndPassword(_email!, _password!);
+          // return imageurl after putting it in storage bucket
+          String? _imageURL = await _cloudStorageService.saveUserImageToStorage(
+              _uid!, _profileImage!);
+          // creating user in fire base docs with data required
+          await _databaseService.createUser(_uid, _email!, _name!, _imageURL!);
+          // log out to restart  provider work
+          await _authenticationProvider.logOut();
+          // login and restart provider function it will listen now and automatically log in
+          await _authenticationProvider.loginUsingEmailAndPassword(
+              _email!, _password!);
+        }
+      },
     );
   }
 }

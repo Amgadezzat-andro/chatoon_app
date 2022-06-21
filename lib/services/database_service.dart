@@ -9,12 +9,28 @@ class DatabaseService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   DatabaseService() {}
 
+  Future<void> createUser(
+      String _uid, String _email, String _name, String _imageURL) async {
+    try {
+      await _db.collection(USER_COLLECTION).doc(_uid).set(
+        {
+          'email': _email,
+          'image': _imageURL,
+          'last_active': DateTime.now().toUtc(),
+          'name': _name,
+        },
+      );
+    } catch (e) {
+      print(e);
+    }
+  }
+
   // return user
   Future<DocumentSnapshot> getUser(String _uid) {
     return _db.collection(USER_COLLECTION).doc(_uid).get();
   }
 
-  // update last active by passing uid 
+  // update last active by passing uid
   Future<void> updateUserLastSeenTime(String _uid) async {
     try {
       await _db.collection(USER_COLLECTION).doc(_uid).update(
