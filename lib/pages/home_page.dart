@@ -19,7 +19,7 @@ class _HomePageState extends State<HomePage> {
   //final because it wont change
   final List<Widget> _pages = [
     //0
-    ChatPage(),
+    ChatsPage(),
     //1
     UsersPage(),
   ];

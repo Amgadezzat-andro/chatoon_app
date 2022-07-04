@@ -5,9 +5,13 @@ import 'package:chatoon_app/models/chat_message.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:get_it/get_it.dart';
+//Services
+import '../services/navigation_service.dart';
 //Providers
 import '../providers/authentication_provider.dart';
 import '../providers/chats_page_provider.dart';
+//Pages
+import '../pages/chat_page.dart';
 
 //Widgets
 import '../widgets/top_bar.dart';
@@ -18,22 +22,24 @@ import '../models/chat.dart';
 import '../models/chat_user.dart';
 import '../models/chat_message.dart';
 
-class ChatPage extends StatefulWidget {
+class ChatsPage extends StatefulWidget {
   @override
-  State<ChatPage> createState() => _ChatPageState();
+  State<ChatsPage> createState() => _ChatsPageState();
 }
 
-class _ChatPageState extends State<ChatPage> {
+class _ChatsPageState extends State<ChatsPage> {
   late double _deviceHeight;
   late double _deviceWidth;
   late AuthenticationProvider _authenticationProvider;
   late initialize _chatPageProvider;
+  late NavigationService _navigationService;
 
   @override
   Widget build(BuildContext context) {
     _deviceHeight = MediaQuery.of(context).size.height;
     _deviceWidth = MediaQuery.of(context).size.width;
     _authenticationProvider = Provider.of<AuthenticationProvider>(context);
+    _navigationService = GetIt.instance.get<NavigationService>();
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<initialize>(
@@ -129,7 +135,11 @@ class _ChatPageState extends State<ChatPage> {
       imagePath: _chat.imageURL(),
       isActive: _isActive,
       isActivity: _chat.activity,
-      onTap: () {},
+      onTap: () {
+        _navigationService.navigateToPage(
+          ChatPage(chat: _chat),
+        );
+      },
     );
   }
 }
