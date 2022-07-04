@@ -55,6 +55,7 @@ class MainApp extends StatelessWidget {
           '/home': (BuildContext _context) => HomePage(),
           '/register': (BuildContext _context) => RegisterPage(),
         },
+        debugShowCheckedModeBanner: false,
       ),
     );
   }
