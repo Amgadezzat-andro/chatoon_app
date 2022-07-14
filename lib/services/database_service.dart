@@ -1,7 +1,8 @@
 //packages
 // ignore_for_file: avoid_print
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+//Models
+import '../models/chat_message.dart';
 
 const String USER_COLLECTION = "Users";
 const String CHAT_COLLECTION = "Chats";
@@ -66,7 +67,44 @@ class DatabaseService {
         .get();
   }
 
+  //return Stream of Messages for specific Chat
+  Stream<QuerySnapshot> streamMessagesForChat(String _chatID) {
+    return _db
+        .collection(CHAT_COLLECTION)
+        .doc(_chatID)
+        .collection(MESSAGES_COLLECTION)
+        .orderBy("sent_time", descending: false)
+        .snapshots();
+  }
 
+  //add message to Specific Chat
+  Future<void> addMessageToChat(String _chatID, ChatMessage _message) async {
+    try {
+      await _db
+          .collection(CHAT_COLLECTION)
+          .doc(_chatID)
+          .collection(MESSAGES_COLLECTION)
+          .add(_message.toJson());
+    } catch (e) {
+      print(e);
+    }
+  }
 
+  //update specific chat 
+  Future<void> updateChatData( String _chatID, Map<String, dynamic> _data) async {
+    try {
+      await _db.collection(CHAT_COLLECTION).doc(_chatID).update(_data);
+    } catch (e) {
+      print(e);
+    }
+  }
 
+  //delete specific Chat
+  Future<void> deleteChat(String _chatID) async {
+    try {
+      await _db.collection(CHAT_COLLECTION).doc(_chatID).delete();
+    } catch (e) {
+      print(e);
+    }
+  }
 }
