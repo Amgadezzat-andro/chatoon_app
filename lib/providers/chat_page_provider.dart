@@ -71,6 +71,44 @@ class ChatPageProvider extends ChangeNotifier {
     }
   }
 
+  void sendTextMessage() {
+    if (_message != null) {
+      ChatMessage _messageToSend = ChatMessage(
+        content: _message!,
+        type: MessageType.TEXT,
+        senderID: _authenticationProvider.user.uid,
+        sentTime: DateTime.now(),
+      );
+      _databaseService.addMessageToChat(_chatId, _messageToSend);
+    }
+  }
+
+  void sendImageMessage() async {
+    try {
+      PlatformFile? _file = await _mediaService.pickImageFromLibrary();
+      if (_file != null) {
+        String? _downloadURL =
+            await _cloudStorageService.saveChatImageToStorage(
+                _chatId, _authenticationProvider.user.uid, _file);
+        ChatMessage _messageToSend = ChatMessage(
+          content: _downloadURL!,
+          type: MessageType.IMAGE,
+          senderID: _authenticationProvider.user.uid,
+          sentTime: DateTime.now(),
+        );
+        _databaseService.addMessageToChat(_chatId, _messageToSend);
+      }
+    } catch (e) {
+      print('Error Sending Image Message');
+      print(e);
+    }
+  }
+
+  void deleteChat() {
+    goBack();
+    _databaseService.deleteChat(_chatId);
+  }
+
   void goBack() {
     _navigationService.goBack();
   }
