@@ -168,6 +168,8 @@ class _ChatPageState extends State<ChatPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             _messageTextField(),
+            _sendMessageButton(),
+            _imageMessageButton(),
           ],
         ),
       ),
@@ -184,6 +186,34 @@ class _ChatPageState extends State<ChatPage> {
         regEx: r"^(?!\s*$).+",
         hintText: 'Type a message',
         obscuredText: false,
+      ),
+    );
+  }
+
+  Widget _sendMessageButton() {
+    double _size = _deviceHeight * 0.04;
+    return Container(
+      height: _size,
+      width: _size,
+      child: IconButton(
+        onPressed: () {},
+        icon: Icon(
+          Icons.send,
+          color: Colors.white,
+        ),
+      ),
+    );
+  }
+
+  Widget _imageMessageButton() {
+    double _size = _deviceHeight * 0.04;
+    return Container(
+      height: _size,
+      width: _size,
+      child: FloatingActionButton(
+        backgroundColor: Color.fromRGBO(0, 82, 218, 1.0),
+        onPressed: () {},
+        child: Icon(Icons.camera_enhance),
       ),
     );
   }
