@@ -55,6 +55,13 @@ class _UsersPageState extends State<UsersPage> {
               ),
             ),
           ),
+          CustomTextField(
+            onEditingComplete: (_value) {},
+            hintText: 'Search...',
+            obsecureText: false,
+            controller: _searchFieldTextEditingController,
+            icon: Icons.search,
+          )
         ],
       ),
     );
