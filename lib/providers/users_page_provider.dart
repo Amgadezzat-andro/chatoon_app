@@ -54,4 +54,13 @@ class UsersPageProvider extends ChangeNotifier {
       print(e);
     }
   }
+
+  void updateSelectedUsers(ChatUser _user) {
+    if (_selectedUsers.contains(_user)) {
+      _selectedUsers.remove(_user);
+    } else {
+      _selectedUsers.add(_user);
+    }
+    notifyListeners();
+  }
 }
