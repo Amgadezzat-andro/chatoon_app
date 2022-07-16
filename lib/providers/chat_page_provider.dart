@@ -94,7 +94,10 @@ class ChatPageProvider extends ChangeNotifier {
       if (_file != null) {
         String? _downloadURL =
             await _cloudStorageService.saveChatImageToStorage(
-                _chatId, _authenticationProvider.user.uid, _file);
+          _chatId,
+          _authenticationProvider.user.uid,
+          _file,
+        );
         ChatMessage _messageToSend = ChatMessage(
           content: _downloadURL!,
           type: MessageType.IMAGE,
