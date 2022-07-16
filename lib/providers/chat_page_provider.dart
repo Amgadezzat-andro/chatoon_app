@@ -39,8 +39,11 @@ class ChatPageProvider extends ChangeNotifier {
     _message = _value;
   }
 
-  ChatPageProvider(this._chatId, this._authenticationProvider,
-      this._messagesListViewController) {
+  ChatPageProvider(
+    this._chatId,
+    this._authenticationProvider,
+    this._messagesListViewController,
+  ) {
     _databaseService = GetIt.instance.get<DatabaseService>();
     _cloudStorageService = GetIt.instance.get<CloudStorageService>();
     _mediaService = GetIt.instance.get<MediaService>();
@@ -68,6 +71,15 @@ class ChatPageProvider extends ChangeNotifier {
           messages = _messages;
           notifyListeners();
           //Add Scroll to Bottom Call
+          WidgetsBinding.instance.addPostFrameCallback(
+            (_) {
+              if (_messagesListViewController.hasClients) {
+                _messagesListViewController.jumpTo(
+                  _messagesListViewController.position.maxScrollExtent,
+                );
+              }
+            },
+          );
         },
       );
     } catch (e) {
