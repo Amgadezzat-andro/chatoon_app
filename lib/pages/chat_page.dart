@@ -196,7 +196,13 @@ class _ChatPageState extends State<ChatPage> {
       height: _size,
       width: _size,
       child: IconButton(
-        onPressed: () {},
+        onPressed: () {
+          if (_messageFormState.currentState!.validate()) {
+            _messageFormState.currentState!.save();
+            _chatPageProvider.sendTextMessage();
+            _messageFormState.currentState!.reset();
+          }
+        },
         icon: Icon(
           Icons.send,
           color: Colors.white,
