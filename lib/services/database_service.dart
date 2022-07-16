@@ -90,8 +90,9 @@ class DatabaseService {
     }
   }
 
-  //update specific chat 
-  Future<void> updateChatData( String _chatID, Map<String, dynamic> _data) async {
+  //update specific chat
+  Future<void> updateChatData(
+      String _chatID, Map<String, dynamic> _data) async {
     try {
       await _db.collection(CHAT_COLLECTION).doc(_chatID).update(_data);
     } catch (e) {
@@ -106,5 +107,15 @@ class DatabaseService {
     } catch (e) {
       print(e);
     }
+  }
+
+  Future<QuerySnapshot> getUsers({String? name}) {
+    Query _query = _db.collection(USER_COLLECTION);
+    if (name != null) {
+      _query = _query
+          .where('name', isGreaterThanOrEqualTo: name)
+          .where('name', isLessThanOrEqualTo: name + 'z');
+    }
+    return _query.get();
   }
 }
