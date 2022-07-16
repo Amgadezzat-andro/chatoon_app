@@ -61,9 +61,29 @@ class _UsersPageState extends State<UsersPage> {
             obsecureText: false,
             controller: _searchFieldTextEditingController,
             icon: Icons.search,
-          )
+          ),
+          _usersList(),
         ],
       ),
     );
+  }
+
+  Widget _usersList() {
+    return Expanded(child: () {
+      return ListView.builder(
+        itemBuilder: (BuildContext _context, int _index) {
+          return CustomListViewTile(
+            height: _deviceHeigth * 0.10,
+            title: 'User $_index',
+            subtitle: 'Last Active:',
+            imagePath: 'https://i.pravatar.cc/300',
+            isActive: true,
+            isSelected: true,
+            onTap: () {},
+          );
+        },
+        itemCount: 10,
+      );
+    }());
   }
 }
