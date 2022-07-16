@@ -82,21 +82,39 @@ class _UsersPageState extends State<UsersPage> {
   }
 
   Widget _usersList() {
+    List<ChatUser>? _users = _pageProvider.users;
     return Expanded(child: () {
-      return ListView.builder(
-        itemBuilder: (BuildContext _context, int _index) {
-          return CustomListViewTile(
-            height: _deviceHeigth * 0.10,
-            title: 'User $_index',
-            subtitle: 'Last Active:',
-            imagePath: 'https://i.pravatar.cc/300',
-            isActive: true,
-            isSelected: true,
-            onTap: () {},
+      if (_users != null) {
+        if (_users.length != 0) {
+          return ListView.builder(
+            itemBuilder: (BuildContext _context, int _index) {
+              return CustomListViewTile(
+                height: _deviceHeigth * 0.10,
+                title: _users[_index].name,
+                subtitle: 'Last Active: ${_users[_index].lastDayActive()}',
+                imagePath: _users[_index].imageUrL,
+                isActive: _users[_index].wasRecentlyActive(),
+                isSelected: false,
+                onTap: () {},
+              );
+            },
+            itemCount: _users.length,
           );
-        },
-        itemCount: 10,
-      );
+        } else {
+          return Center(
+            child: Text(
+              'No Users Found.',
+              style: TextStyle(color: Colors.white),
+            ),
+          );
+        }
+      } else {
+        return Center(
+          child: CircularProgressIndicator(
+            color: Colors.white,
+          ),
+        );
+      }
     }());
   }
 }
