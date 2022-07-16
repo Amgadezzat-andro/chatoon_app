@@ -63,4 +63,44 @@ class UsersPageProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  void createChat() async {
+    try {
+      //Create Chat
+      List<String> _membersIds =
+          _selectedUsers.map((_user) => _user.uid).toList();
+      _membersIds.add(_authenticationProvider.user.uid);
+      bool _isGroup = _selectedUsers.length > 1;
+      DocumentReference? _doc = await _databaseService.createChat(
+        {
+          'is_group': _isGroup,
+          'is_activity': false,
+          'members': _membersIds,
+        },
+      );
+      //Navigate to ChatPage
+      List<ChatUser> _members = [];
+      for (var _uid in _membersIds) {
+        DocumentSnapshot _userSnapShot = await _databaseService.getUser(_uid);
+        Map<String, dynamic> _userData =
+            _userSnapShot.data() as Map<String, dynamic>;
+        _userData['uid'] = _userSnapShot.id;
+        _members.add(ChatUser.fromJSON(_userData));
+      }
+      ChatPage _chatPage = ChatPage(
+        chat: Chat(
+          uid: _doc!.id,
+          currentUserUid: _authenticationProvider.user.uid,
+          members: _members,
+          messages: [],
+          activity: false,
+          group: _isGroup,
+        ),
+      );
+      _navigationService.navigateToPage(_chatPage);
+    } catch (e) {
+      print('Error Creating Chat.');
+      print(e);
+    }
+  }
 }
