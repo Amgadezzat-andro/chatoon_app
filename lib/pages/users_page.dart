@@ -60,7 +60,9 @@ class _UsersPageState extends State<UsersPage> {
             TopBar(
               'Users',
               primaryAction: IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  _authenticationProvider.logOut();
+                },
                 icon: Icon(
                   Icons.logout,
                   color: Color.fromRGBO(0, 82, 218, 1.0),
@@ -68,7 +70,10 @@ class _UsersPageState extends State<UsersPage> {
               ),
             ),
             CustomTextField(
-              onEditingComplete: (_value) {},
+              onEditingComplete: (_value) {
+                _pageProvider.getUsers(name: _value);
+                FocusScope.of(context).unfocus();
+              },
               hintText: 'Search...',
               obsecureText: false,
               controller: _searchFieldTextEditingController,
