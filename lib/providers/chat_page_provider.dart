@@ -30,8 +30,13 @@ class ChatPageProvider extends ChangeNotifier {
 
   List<ChatMessage>? messages;
   String? _message;
+
   String get message {
     return message;
+  }
+
+  void set message(String _value) {
+    _message = _value;
   }
 
   ChatPageProvider(this._chatId, this._authenticationProvider,
