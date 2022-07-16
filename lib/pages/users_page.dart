@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:get_it/get_it.dart';
 //Providers
 import '../providers/authentication_provider.dart';
+import '../providers/users_page_provider.dart';
 //Widgets
 import '../widgets/top_bar.dart';
 import '../widgets/custom_input_fields.dart';
@@ -22,6 +23,7 @@ class _UsersPageState extends State<UsersPage> {
   late double _deviceHeigth;
   late double _deviceWidth;
   late AuthenticationProvider _authenticationProvider;
+  late UsersPageProvider _pageProvider;
   final TextEditingController _searchFieldTextEditingController =
       TextEditingController();
   @override
@@ -29,43 +31,54 @@ class _UsersPageState extends State<UsersPage> {
     _deviceHeigth = MediaQuery.of(context).size.height;
     _deviceWidth = MediaQuery.of(context).size.width;
     _authenticationProvider = Provider.of<AuthenticationProvider>(context);
-    return buildUI();
+
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<UsersPageProvider>(
+          create: (_) => UsersPageProvider(_authenticationProvider),
+        ),
+      ],
+      child: buildUI(),
+    );
   }
 
   Widget buildUI() {
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: _deviceWidth * 0.03,
-        vertical: _deviceHeigth * 0.02,
-      ),
-      height: _deviceHeigth * 0.98,
-      width: _deviceWidth * 0.97,
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          TopBar(
-            'Users',
-            primaryAction: IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.logout,
-                color: Color.fromRGBO(0, 82, 218, 1.0),
+    return Builder(builder: (BuildContext _context) {
+      _pageProvider = _context.watch<UsersPageProvider>();
+      return Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: _deviceWidth * 0.03,
+          vertical: _deviceHeigth * 0.02,
+        ),
+        height: _deviceHeigth * 0.98,
+        width: _deviceWidth * 0.97,
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            TopBar(
+              'Users',
+              primaryAction: IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.logout,
+                  color: Color.fromRGBO(0, 82, 218, 1.0),
+                ),
               ),
             ),
-          ),
-          CustomTextField(
-            onEditingComplete: (_value) {},
-            hintText: 'Search...',
-            obsecureText: false,
-            controller: _searchFieldTextEditingController,
-            icon: Icons.search,
-          ),
-          _usersList(),
-        ],
-      ),
-    );
+            CustomTextField(
+              onEditingComplete: (_value) {},
+              hintText: 'Search...',
+              obsecureText: false,
+              controller: _searchFieldTextEditingController,
+              icon: Icons.search,
+            ),
+            _usersList(),
+          ],
+        ),
+      );
+    });
   }
 
   Widget _usersList() {
