@@ -110,10 +110,21 @@ class _ChatPageState extends State<ChatPage> {
           child: ListView.builder(
             itemCount: _chatPageProvider.messages!.length,
             itemBuilder: (BuildContext _context, int _index) {
+              ChatMessage _message = _chatPageProvider.messages![_index];
+              bool _isOwnMessage =
+                  _message.senderID == _authenticationProvider.user.uid;
               return Container(
-                child: Text(
-                  _chatPageProvider.messages![_index].content,
-                  style: TextStyle(color: Colors.white),
+                child: CustomChatListViewTile(
+                  deviceHeigth: _deviceHeight,
+                  width: _deviceWidth * 0.80,
+                  message: _message,
+                  isOwnMessage: _isOwnMessage,
+                  sender: this
+                      .widget
+                      .chat
+                      .members
+                      .where((_member) => _member.uid == _message.senderID)
+                      .first,
                 ),
               );
             },

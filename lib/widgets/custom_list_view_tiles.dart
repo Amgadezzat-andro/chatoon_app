@@ -72,3 +72,46 @@ class CustomListViewTileWithActivity extends StatelessWidget {
     );
   }
 }
+
+class CustomChatListViewTile extends StatelessWidget {
+  final double width;
+  final double deviceHeigth;
+  final bool isOwnMessage;
+  final ChatMessage message;
+  final ChatUser sender;
+
+  CustomChatListViewTile({
+    required this.width,
+    required this.deviceHeigth,
+    required this.isOwnMessage,
+    required this.message,
+    required this.sender,
+  });
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(bottom: 10),
+      width: width,
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment:
+            isOwnMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          !isOwnMessage
+              ? RoundedImageNetwork(
+                  key: UniqueKey(),
+                  imagePath: sender.imageUrL,
+                  size: width * 0.04)
+              : Container(),
+          SizedBox(
+            width: width * 0.05,
+          ),
+          message.type == MessageType.TEXT
+              ? Text(message.content)
+              : Text(message.content),
+        ],
+      ),
+    );
+  }
+}
